@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <style>
+    table {
+      width: 100%;
+      border: 1px solid black;
+      border-collapse: collapse;
+      background-color: #f0f0f0;
+    }
+    td {
+      border: 1px solid black;
+      padding: 10px;
+      text-align: center;
+    }
+
+    input {
+      width: 30px;
+    }
+  </style>
+
+  <body>
+    <div class="container">
+      <table>
+        <thead>
+          <tr>
+            <td>Tên hộ</td>
+            <td>Tour</td>
+            <td>Người lớn</td>
+            <td>Trẻ em</td>
+            <td>Thành tiền</td>
+          </tr>
+        </thead>
+
+        <tbody id="table-body"></tbody>
+      </table>
+
+      <button onclick="display()">Display Data</button>
+    </div>
+  </body>
+  <script>
+    var arr = [
+      { name: "Nguyễn Văn An", tour: "Đà Nẵng - Hội An" },
+      { name: "Trần Thái Bình", tour: "Phú Quốc" },
+      { name: "Nguyễn Văn Nguyên", tour: "Phú Quý" },
+    ];
+
+    const adult = 1500000;
+    const child = 600000;
+
+    function display() {
+      const rows = arr.map((obj, index) => {
+          return `
+        <tr>
+            <td>${obj.name}</td>
+            <td>${obj.tour}</td>
+            <td><input type="number" class="adult" id="adult-${index}" min=1 value=1></td>
+            <td><input type="number" class="child" id="child-${index}" min=1 value=1></td>
+            <td><span id="amount-${index}" ></span> VND </td>
+        </tr>
+      `;}).join("");
+      document.getElementById("table-body").innerHTML = rows;
+
+      // Input value change -> Change too.
+      arr.forEach((obj, index) => {
+        document
+          .getElementById(`adult-${index}`)
+          .addEventListener("change", () => getAmount(index));
+        document
+          .getElementById(`child-${index}`)
+          .addEventListener("change", () => getAmount(index));
+      });
+
+      arr.forEach((obj, index) => getAmount(index));
+    }
+
+    function getAmount(index) {
+      let priceAdult = document.getElementById(`adult-${index}`).value;
+      let priceChild = document.getElementById(`child-${index}`).value;
+
+      let amount = adult * priceAdult + child * priceChild;
+
+      document.getElementById(`amount-${index}`).innerHTML =
+        parseFloat(amount).toLocaleString("de-DE");
+    }
+  </script>
+</html>
